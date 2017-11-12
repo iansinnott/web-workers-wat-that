@@ -5,6 +5,25 @@ import { merge } from 'rxjs/observable/merge'
 
 const action$ = new Subject();
 
+// My larger idea is to somehow make it fairly seamless to have worker epics.
+// I.e. epics that run completely with in a web worker. What would be nice
+// though, is to be able to collocate them with the rest of your code. I also
+// went back on fourth on whether to encapsulate async worker tasks into a
+// helper, like a `postMessage` that returned an observable, or whether to do
+// what i'm now suggesting which is simply export a worker epic (can be the
+// result of combine epics) that functions almost exactly the same as any other
+// epic. Then, at some point I will need to create the worker itself which gets
+// set up much like redux observable. It takes in, from the outside world, some
+// sort of root epic and connects that up. But when it subscribes to the stream
+// the results are posted back and dispatched into the redux store (at that
+// point of course they will also make it into standard epics, so there might be
+// some considerations to be had here.)
+//
+// const workerEpic = (action$) =>
+//   action$.ofType('FETCH')
+//     .do(x => debug('JUST SAW', x))
+//     .ignoreElements();
+
 onmessage = (e) => {
   action$.next(e.data);
 };
