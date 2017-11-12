@@ -27,7 +27,7 @@ module.exports = {
         test: /\.worker\.js$/,
         use: {
           loader: 'worker-loader',
-          // options: { inline: true }
+          // options: { inline: true } // Use if same origin problems arrise
         },
       },
     ],
